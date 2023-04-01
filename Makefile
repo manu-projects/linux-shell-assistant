@@ -1,2 +1,4 @@
--include menu.mk
--include desktop-environment.mk
+-include desktop-environment/menu.mk
+-include desktop-environment/Makefile
+
+DESKTOP_ENVIRONMENT_DIR=desktop-environment
