@@ -1,4 +1,4 @@
-CURRENT_DESKTOP=$${XDG_CURRENT_DESKTOP}
+CURRENT_DESKTOP_ENVIRONMENT=$${XDG_CURRENT_DESKTOP}
 
 install-gnome-desktop:
 	@sudo aptitude install ubuntu-desktop
