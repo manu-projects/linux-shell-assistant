@@ -1,0 +1,6 @@
+* Archivos de Dispositivos en /dev
+** Referencias
+*** Referencias Oficiales
+    1. [[https://www.debian.org/releases/stable/armel/apcs04.es.html][Nombres de dispositivos en Linux (debian.org)]]
+*** Referencias Extraoficiales
+    1. [[https://www.baeldung.com/linux/dev-directory][Understanding the /dev directory in linux (baeldung.com)]]
