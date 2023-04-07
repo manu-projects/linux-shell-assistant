@@ -1,138 +1,17 @@
-# El archivo /etc/fstab
-# - hace referencia a "tabla de filesystem"
-# - contiene información del montaje ESTÁTICO de los dispositivos
-# - se utiliza para montar "dispositivos con Filesystem de almacenamiento"
-#
-# Cada linea del archivo /etc/fstab
-# - representa a un dispositivo de bloque
-# - cada dispositivo tiene los siguientes campos: <file system> <mount point> <type> <options> <dump> <pass>
-# - para más información ejecutar por la linea de comandos el comando de linux `man fstab`
-#
-# El archivo /etc/mtab
-# - hace referencia a "tabla de montado de los filesystems"
-# - contiene información del montaje DINÁMICO (en tiempo real) de los dispositivos
-# - contiene la misma información que ejecutar el comando `mount` (sin pasarle ningún parámetro)
-# - lo utilizan los Sistemas Operativos para cargar configuraciones de su Filesystem
-#
-# Por ejemplo si queremos reparar el (GRUB) Sistema de Arranque, podemos crear un (mount bind) en /mnt
-# - el dispositivo "/dev/proc" con un filesytem del tipo "proc" y el punto de montaje es "/proc")
-# - el dispositivo "/dev/sysfs" con un filesytem del tipo "sysfs" y el punto de montaje es "/sys")
-# - el dispositivo "/dev/udev" con un filesytem del tipo "devtmpfs" y el punto de montaje es "/dev")
-# - el dispositivo "/dev/tmpfs" con un filesytem del tipo "tmpfs" y el punto de montaje es "/run")
-# - el dispositivo "/dev/devpts" con un filesytem del tipo "devpts" y el punto de montaje es "/dev/pts")
-#
-# Nota: lo anterior se puede observar ejecutando por linea de comandos lo siguiente:
-# cat /etc/mtab | grep -E '(proc /proc|sysfs /sys|tmpfs /run|udev /dev|devpts /dev/pts) '
-# .............................................................................................................
-#
-# 1º campo <file system>:
-# representa con el identificador (UUID) del dispositivo (lo obtenemos del campo UUID del comando de linux `blkid`)
-#
-# Nota: alternativa "no sugerida" al UUID, utilizar el nombre del dispositivo en /dev (Ej. /dev/sda1 ó /dev/sda2)
-# .............................................................................................................
-#
-# 2º campo <mount point>: (ó target del filesystem)
-# representa la ruta utilizada como Punto de Montaje del filesystem
-#
-# - punto de montaje: /boot/efi (para la partición EFI con formato FAT32)
-# - punto de montaje: /mnt (para alguna instalación de un Sistema Operativo)
-# - punto de montaje: /home (para desacoplar los Sistemas Operativos de los Perfiles de Usuario Linux)
-#
-# .............................................................................................................
-#
-# 3º campo <type>:
-# representa el tipo de filesystem (ext3, ext4, ntfs, vfat, tmpfs, sysfs, proc, ..)
-#
-# - tipo: ext3 ó ext4 (para un Sistema de Operativo Linux)
-# - tipo: swap (espacio en disco que hace de Memoria RAM, es más lento comparado con la RAM)
-# - tipo: vfat (para la partición UEFI)
-#
-# Nota (1): si utilizamos los comandos de linux `blkid` ó `lsblk` veremos "vfat" en vez de "FAT32" en el campo TYPE,
-# pero no hay problema porque que el formato de filesystem FAT32 es una extensión de fat y vfat
-#
-# Nota (2): si utilizamos algún Gestor de Particionamiento con una interfáz gráfica..
-# elegiremos FAT32 como tipo de filesystem para la partición EFI
-#
-# Nota (3): en /etc/fstab debemos escribir "vfat" en vez de "FAT32"
-#
-# Nota (2): previamente cambiar desde la BIOS al Modo UEFI en vez del Modo BIOS Legacy
-
-# .............................................................................................................
-#
-# 4º campo <options>:
-# se utiliza la "coma" como separador de las opciones (Ej. rw, suid, dev, exec, auto, nouser, async)
-# también se pueden utilizar como opciones del comando de linux `mount`, aunque éste cambio no se persiste en el archivo /etc/fstab
-# (Ej. `sudo mount -o remount, rw /dev/sda2`)
-#
-# - auto: al iniciar el sistema se monta automáticamente
-# - noauto: lo opuesto a la opción "auto"
-# (noauto es una restricción, habrá que montarlo por linea de comandos con el comando de linux `mount`)
-#
-# - exec: permite ejecutar archivos binarios
-# - noexec: lo opuesto a la opción "exec"
-# (noexec es una restricción, impidiendo ejecutar binarios apesar de que el archivo tenga permisos de ejecución)
-#
-# - atime: permite acceder al "último tiempo de acceso" de los archivos (Ej. cuando modificamos un archivo, se guarda una referencia del instante)
-# - noatime: lo opuesto a la opción "atime" (NO guarda la referencia de último acceso)
-# (noatime es útil para el uso eficiente Discos de estado sólido, porque reduce los tiempos de acceso de lectura y escritura)
-#
-# - diratime: misma intención que la opción "atime", pero enfocada a directorios
-# - nodiratime: misma intención que la opción "noatime", pero enfocada a directorios
-#
-# - owner: permite montar el dispositivo si y sólo si el usuario está asignado como dueño del dispositivo a montar
-#
-# - ro: permisos de sólo lectura (only-read), como protección
-# - rw: permisos de lectura/escritura (read/write)
-#
-# - user: permite que cualquier usuario monte el dispositivo
-# - nouser: lo opuesto a la opción "user"
-# (nouser es una restricción, a menos que el usuario tenga permisos root ó esté habilitada la opción owner y sea propietario del dispositivo)
-#
-# - sync: se guardan los cambios del Sistema de forma Sincrónica
-# (poco eficiente, ante cada operación de escritura, se guardan en disco)
-#
-# - async: se guardan los cambios del Sistema de forma Asincrónica
-# (es más eficiente, utiliza un buffer temporal y cuando se llena guarda en disco)
-#
-# - remount: en caso de fallar el dispositivo, se vuelve a montar
-#
-# - defaults: agrega varias de las opciones anteriores por defecto (rw, suid, dev, exec, auto, nouser, async)
-#
-# .............................................................................................................
-#
-# 5º campo <dump>:
-# hace copias de seguridad de un filesystem (sistema de archivos), toma sólo dos valores 0 y 1
-#
-# - valor 0: representa el bit de DESACTIVADO
-# - valor 1: representa el bit de ACTIVADO (se harán los backups)
-#
-# .............................................................................................................
-#
-# 6º campo <pass>:
-# chequea errores en el disco
-#
-# - valor 0: representa el bit de DESACTIVADO
-# - valor 1: sugerido sólo el "Punto de Montaje" / (raíz), para que sea lo primero en chequear
-# - valor 2,3,..: para respetar un orden de prioridad al chequear Filesystem (Ej. distintas distribuciones de Linux)
-# (si no nos interesa el orden podemos dejarle el mismo valor y que el sistema decida)
-#
-# ....................................................................................................
-
-## Ejemplo 1: si tenemos la BIOS EN MODO UEFI + TABLA DE PARTICIÓN GPT + PARTICIÓN EFI
-# - el UUID de la partición EFI lo obtenemos con el comando de linux `blkid`
+## Ejemplo archivo fstab - BIOS EN MODO UEFI + TABLA DE PARTICIÓN GPT + PARTICIÓN EFI
+# - el UUID de la partición EFI lo obtenemos con el comando de linux ~blkid~
 # - el punto de montaje: /boot/efi
-# - tipo de filesytem: vfat
+# - tipo de filesytem: vfat (en el gestor de particiones elegimos FAT32, pero en el archivo fstab será vfat)
 # - opciones:
 # - dump: desactivado (bit 0), no hará copias de seguridad del filesystem
 # - pass: prioridad 1 (Alta prioridad para chequee errores, por ser el sistema de particiones)
 
 UUID=AB43-5FCD /boot/efi vfat umask=0077 0 1
 
+# ..................................................................................................................
 
-## Ejemplo 2: si queremos que el directorio /home de los usuarios linux estén desacoplados de las Distribuciones de Linux
-# (se comparte entre las distintas distribuciones linux, y si alguna falla éste no se ve afectado)
-#
-# - el UUID lo obtenemos con el comando de linux `blkid` (hace referencia a los dispositivos de bloque)
+## Ejemplo archivo fstab - directorio /home de los usuarios linux desacoplado de las Distribuciones de Linux
+# - el UUID lo obtenemos con el comando de linux ~blkid~ (hace referencia a los dispositivos de bloque)
 # - el punto de montaje: /home (cada usuario de linux tendrá un directorio dentro de éste /home)
 # - tipo de filesystem: ext4 (porque es una distribución de Linux)
 # - opciones: defaults
@@ -140,4 +19,3 @@ UUID=AB43-5FCD /boot/efi vfat umask=0077 0 1
 # - pass:  prioridad 2 (Menor prioridad que /boot/efi, al chequear éste Sistema de Archivos que no tiene un Sistema Operativo)
 
 UUID=f9ffb999-78ad-4469-9575-a3176225596a /home ext4 defaults 0 2
-
