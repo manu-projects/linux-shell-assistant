@@ -1,0 +1,14 @@
+Archivos de configuración /etc/.bashrc, ~/.bashrc
+- la Bash Shell los leerá en ese orden
+- la Bash Shell cargará las variables de entorno + funciones + ejecutará los comandos
+- reconocemos una Interactive Non-login Shell si NO aparece un guión (-) al ejecutar `echo $0`
+- (RC) refiere a "Resource Configuration"
+
+Observaciones
+- los archivos en /etc: requieren ejecutar (sudo) permisos de superusuario + se compartirá para todos los usuarios del sistema
+- los archivos en ~/: son específicos para cada usuario que tenga su directorio home
+- aplicamos los cambios de los archivos de configuración de bash shell, ejecutando el comando `source`
+
+Ejemplos de Interactive Non-Login Shell
+a) atajo Alt+Ctrl+t (desde un Emulador de Terminal (xterm, Konsole, ..) para crear una nueva (PTS) Pseudo-terminal esclava)
+b) `bash` ó `bash -i` (desde una (PTS) Pseudo-terminal esclava, y el usuario tiene asignada una bash shell en /etc/passwd)
