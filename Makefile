@@ -2,6 +2,7 @@
 -include security-network/Makefile
 -include disk-partition/Makefile
 -include grub-boot/Makefile
+-include shells-terminal-emulators/Makefile
 -include utils.mk
 
 .DEFAULT_GOAL=help
