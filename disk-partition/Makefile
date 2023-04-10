@@ -1,3 +1,5 @@
+MODULE_DISK_PARTITION_RESOURCES=disk-partition/resources
+
 ASK_DIR=read -p "Escriba la ruta absoluta: "
 ASK_USER_NAME=read -p "Escriba el nombre del usuario (Ej. root, jelou, ..):"
 
@@ -40,8 +42,14 @@ copy-uuid-from-block-device: ##
 	&& lsblk --noheadings --output=UUID /dev/$${DEVICE_NAME} \
 	| xclip -rmlastnl -selection clipboard
 
-##@ Disk Partition (show info)
+##@ Disk Partition (doc)
+device-types: ##
+	@bat $(MODULE_DISK_PARTITION_RESOURCES)/device-types.txt
 
+partition-tables-types: ##
+	@bat $(MODULE_DISK_PARTITION_RESOURCES)/partition-tables-types.txt
+
+##@ Disk Partition (show sysinfo)
 # TODO: decidir si elegir por config entre `fdisk` ó `parted`	(Ej. sudo parted --list /dev/sda)
 partition-tables-list: ## listar las tablas de partición y sus particiones (nombre, tamaño, tipo formato)
 	sudo fdisk --list
