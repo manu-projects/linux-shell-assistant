@@ -4,7 +4,7 @@ CURRENT_USER=$(shell whoami)
 
 ASK_NAME_SHELL=read -p "Ingrese el nombre la Shell (Ej. bash, fish, zsh, ..): "
 
-VALID_LOGIN_SHELLS=$(MODULE_SHELLS_RESOURCES)/valid-login-shells.lst
+DOC_VALID_LOGIN_SHELLS=$(MODULE_SHELLS_RESOURCES)/valid-login-shells.lst
 DOC_LOGIN_SHELLS=$(MODULE_SHELLS_RESOURCES)/interactive-login-shell.txt
 DOC_NONLOGIN_SHELLS=$(MODULE_SHELLS_RESOURCES)/interactive-non-login-shell.txt
 DOC_SHELLSCRIPT=$(MODULE_SHELLS_RESOURCES)/noninteractive-nonlogin-shell.txt
@@ -59,4 +59,45 @@ print-current-shell: ##
 	@echo $(CURRENT_SHELL)
 
 print-valid-login-shells: ##
-	@cat $(VALID_LOGIN_SHELLS_FILE)
+	@bat $(DOC_VALID_LOGIN_SHELLS)
+
+##@ Terminal Emulators
+# TODO: menu de selección con whiptail para instalarlos
+install-ttyemulator-terminator:
+	@sudo aptitude install terminator
+
+install-ttyemulator-xterm:
+	@sudo aptitude install xterm
+
+install-ttyemulator-konsole:
+	@sudo aptitude install konsole
+
+install-ttyemulator-tilda:
+	@sudo aptitude install tilda
+
+install-ttyemulator-rxvt:
+	@sudo aptitude install rxvt-unicode
+
+install-ttyemulator-lilyterm:
+	@sudo aptitude install lilyterm
+
+install-ttyemulator-sakura:
+	@sudo aptitude install sakura
+
+install-ttyemulator-guake:
+	@sudo aptitude install guake
+
+install-ttyemulator-eterm:
+	@sudo aptitude install eterm
+
+install-ttyemulator-roxterm:
+	@sudo aptitude install roxterm
+
+install-ttyemulator-tilix:
+	@sudo aptitude install tilix
+
+install-ttyemulator-yakuake:
+	@sudo aptitude install yakuake
+
+install-ttyemulator-alacritty:
+	@sudo aptitude install alacritty
