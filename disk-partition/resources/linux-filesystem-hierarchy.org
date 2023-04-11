@@ -1,11 +1,30 @@
 #+BEGIN_QUOTE
 Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 #+END_QUOTE
+* Directorios Esenciales para el Arranque del Sistema
+** Directorios Esenciales en para el Arranque del Sistema
+   - directorios que deberían estar en la misma partición del *Sistema de Archivos Raíz* (/)
+     1) /bin
+     2) /boot
+     3) /dev
+     4) /etc
+     5) /lib
+     6) /proc
+     7) /sbin
+** Directorios montables en otra partición
+   - directorios que pueden estar *montados en otra partición ó sistema* (para facilitar backups, ó por temas de seguridad)
+     1) /home
+     2) /mnt
+     3) /tmp
+     4) /usr
+     5) /var
 * Sistema de archivos raíz (/)
   - archivos necesarios para arrancar el sistema y el resto de los sistemas de archivos
 * Sistema de Archivos (/usr)
-  - archivos que se agregan de la instalación de una distribución de Linux
-  - comandos, librerías, páginas de manual y otros archivos que NO son modificados durante la ejecución normal del sistema.
+  - el contenido es ESTÁTICO
+  - contiene archivos por la *instalación de una distribución de Linux*
+  - comandos, librerías, páginas de manual y otros archivos que *NO son modificados durante la ejecución normal del sistema*
+    (Ej. puede ocurrir que queramos montar éste Sistema de Archivos en "MODO DE SÓLO LECTURA" es decir read-only)
 ** /usr/local
    - programas que instalamos *posterior a la instalación inicial de la distribución de linux*
    - las distribuciones de linux "NO" deberían agregar archivos éste directorio, permitiendo al usuario
@@ -30,8 +49,46 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 ** /usr/src
    - archivos de código fuente del *Kernel de Linux*
 * Sistema de Archivos (/var)
-  - contiene archivos que son modificados durante la ejecución normal del sistema
-  - Ej. logs, páginas de manual formateadas, archivos temporales, ..
+  - el contenido es DINÁMICO
+  - contiene archivos que son *modificados durante la ejecución normal del sistema*
+  - Ej. logs, páginas de manual formateadas, archivos temporales de gran tamaño, ..
+** /var/log
+   - directorio con la bitácora (registros) del Sistema y diferentes programas/servicios
+
+    #+BEGIN_QUOTE
+    Como la cantidad y tamaño de registros del sistema suelen crecer de forma indefinida,
+    se recomienda utilizar *utilidades para la rotación de logs* (Ej. logrotate)
+    #+END_QUOTE
+*** /var/log/wtmp
+    - archivo "binario" con los registros de *Login* (inicios y cierres de sesión del sistema)
+      1) QUIENES se logearon
+      2) COMO se logearon
+      3) CUANDO se logearon
+    - al no ser un archivo de texto plano necesitamos del comando ~last~ ó ~last --file=/var/log/wtmp~
+*** /var/log/utmp
+    - archivo binario con las *sesiones de usuario activas*
+    - al no ser un archivo de texto plano necesitamos del comando ~w~ ó ~who~ ó ~last --file=/var/log/utmp~
+*** /var/log/btmp
+    - archivo "binario" con los *intentos FALLIDOS de inicio de sesión*
+      1) QUIENES se logearon
+      2) COMO se logearon
+      3) CUANDO se logearon
+    - al no ser un archivo de texto plano necesitamos del comando ~blast~ ó ~last --file=/var/log/btmp~
+*** /var/log/syslog
+    - archivo "de texto plano" con registros del *Sistema* del (daemon) demonio ~syslogd~ (comprobar su estado con ~service syslog status~)
+    - contiene *mensajes del kernel de linux* y *mensajes del programas del Sistema*
+** /var/lock
+   - directorio con *archivos de bloqueo*
+   - los programas los crean cuando están utilizando un *dispositivo* ó un *archivo* de forma exclusiva
+   - los programas al verlos, no intentarán acceder a esos *dispositivos* ó *archivos*
+** /var/tmp
+   - directorio para archivos temporales que
+     - tienen gran tamaño
+     - ó que deben estar más tiempo de lo permitido en ~/tmp~ (Ej. persistir apesar de haber reiniciado el sistema)
+** /var/lib
+** /var/local
+** /var/run
+** /var/backups
 * Sistema de Archivos (/home)
   - directorios específicos de los usuarios de linux
   - Ej. /home/jelou, /home/neverkas, ...
@@ -206,4 +263,3 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 * TODO /proc
 * TODO /opt
 * TODO /initrd
-* /var
