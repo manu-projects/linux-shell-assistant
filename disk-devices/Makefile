@@ -1,32 +1,13 @@
-MODULE_DISK_PARTITION_RESOURCES=disk-partition/resources
-
-ASK_DIR=read -p "Escriba la ruta absoluta: "
-ASK_USER_NAME=read -p "Escriba el nombre del usuario (Ej. root, jelou, ..):"
-
-ASK_DEVICE_NAME=read -p "Escriba el nombre del dispositivo (Ej. sda, sda1, sda2, .., sdb, sdb1, ..): "
-ASK_DEVICE_TYPE=read -p "Escriba el tipo de dispositivo (Ej. ext3, ext4, fat32, ntfs, ..): "
-ASK_DEVICE_MOUNTPOINT=read -p "Escriba punto de montaje (Ej. /mnt/debian, /mnt/win10, /mnt/storage, ..): "
-ASK_DEVICE_PERMISSIONS=read -p "Escriba los permisos ro ó rw (ro: read-only, rw: read-write): "
+include $(MODULE_DISK_DEVICES)/disk-partitions.mk
+include $(MODULE_DISK_DEVICES)/repair-disk.mk
+include $(MODULE_DISK_DEVICES)/utils.mk
 
 # - refiere a todo un disco duro, y el nombre del dispositivo puede variar entre /dev/sda y /dev/sdb
 # - /dev/sda refiere al 1º disco duro detectado
 # - /dev/sdb refiere al 2º disco duro detectado
 DEVICE_HARD_DISK=/dev/sda
 
-# TODO: comandos a evaluar cfdisk, mkfs, partx, sfdisk, addpart, delpart, partprobe, fsck
-
-##@ Disk Partition (create/edit)
-
-# partition-table-create: ##
-# 	echo creando..
-
-# partition-create: ##
-# 	echo creando..
-
-# partition-create-EFI:
-# 	echo creando..
-
-##@ Disk Partition (copy info)
+##@ Disk Devices (copy info)
 
 # comando xclip
 # - opción (-rmlastnl): si el último caracter del texto seleccionado es '\n' (salto de linea), entonces lo remueve
@@ -42,21 +23,9 @@ copy-uuid-from-block-device: ##
 	&& lsblk --noheadings --output=UUID /dev/$${DEVICE_NAME} \
 	| xclip -rmlastnl -selection clipboard
 
-##@ Disk Partition (doc)
+##@ Disk Devices (doc)
 device-types: ##
-	@bat $(MODULE_DISK_PARTITION_RESOURCES)/device-types.txt
-
-partition-tables-types: ##
-	@bat $(MODULE_DISK_PARTITION_RESOURCES)/partition-tables-types.txt
-
-##@ Disk Partition (show sysinfo)
-# TODO: decidir si elegir por config entre `fdisk` ó `parted`	(Ej. sudo parted --list /dev/sda)
-partition-tables-list: ## listar las tablas de partición y sus particiones (nombre, tamaño, tipo formato)
-	sudo fdisk --list
-
-partition-table-by-device-name: ##
-	$(ASK_DEVICE_NAME) DEVICE_NAME \
-	&& sudo fdisk --list /dev/$${DEVICE_NAME}
+	@bat $(MODULE_DISK_DEVICES_RESOURCES)/device-types.txt
 
 # comando lsblk
 # - opción (--paths): imprime la ruta absoluta de los dispositivo de bloque (Ej. /dev/sda1, /dev/sda2, ..)

@@ -130,3 +130,5 @@
    3. [[http://es.tldp.org/Manuales-LuCAS/doc-guia-admin-sis-linux/gasl.pdf][Guia para Administradores de Sistemas GNU/Linux (es.tldp.org)]]
 ** Referencias Extraoficiales
    1. [[https://www.makeuseof.com/linux-directory-structure-explained/][The Linux Directory Structure explained (makeuseof.com)]]
+** Libros Online
+   1. [[http://linux-training.be/linuxsto.pdf][Book Linux Storage by Paul Cobbaut (linux-training.be)]]
