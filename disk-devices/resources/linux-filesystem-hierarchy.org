@@ -91,7 +91,8 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 ** /var/run
 ** /var/backups
 * Sistema de Archivos (/home)
-  - directorios específicos de los usuarios de linux
+  - contiene los *directorios personales* (home directory) de cada usuario del sistema
+  - el esquema de nombres es de la forma ~/home/nombre-de-usuario~
   - Ej. /home/jelou, /home/neverkas, ...
 * Sistema de Archivos (/proc)
   - es un *Filesytem Virtual* porque *Kernel de Linux* lo *persiste en Memoria Principal* (RAM) en vez de fisicamente en Disco
@@ -121,6 +122,54 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
    - directorio con el estado de los *protocolos de red* (wirless, tcp, udp, ...)
 ** /proc/version
    - archivo con la versión del kernel de linux
+* /boot
+  - contiene archivos utilizados por el *Cargador de Arranque* (Boot loader)
+  - contiene las *imagenes del KERNEL de Linux*
+
+  #+BEGIN_QUOTE
+  Ejemplos de *Cargador de Arranque* (Boot loader) son
+  1) GRUB (conocido por ser un cargador de arranque múltiple, es decir elegir entre distintos Sistemas Operativos)
+  2) ó LILO (ya no se utiliza)
+  #+END_QUOTE
+** /boot/grub
+   - directorio con *archivos configuración* del (GRUB)
+* /mnt
+  - directorio para crear *Puntos de Montaje* (temporales) para
+    1) *Sistemas de Archivos* (Ej. ext3, ext4, ntfs, fat32, ..)
+    2) ó *Dispositivos* (Ej. /dev/sda1, /dev/sda2, .., /dev/cdrom, ..)
+  - el *proceso de montaje* permite que
+    1) un *Filesystem* esté disponible por el sistema (acceder a sus archivos)
+    2) el sistema accede al Filesytem montado a través del *punto de montaje* (Ej. /mnt/usb, /mnt/cdrom, ..)
+
+  #+BEGIN_QUOTE
+  Si MONTAMOS un dispositivo
+  - utilizamos el comando ~mount~ de la forma ~mount /dev/nombre-archivo-dispositivo ruta-punto-de-montaje~
+  - el comando ~mount~ requiere privilegios de superusuario (ó usuario root)
+  - Ej. ~mount /dev/sda1 /home~, ó ~mount /dev/usb /mnt/pendrive~
+
+  Si DESMONTAMOS un *dispositivo* ó un *punto de montaje*,
+  - utilizamos el comando ~umount~ de la forma ~umount nombre-dispositivo~ ó ~umount ruta-punto-de-montaje~
+  - Ej. ~umount /home~ ó ~umount /dev/sda1~
+
+  La ruta de punto de montaje
+  - es desde dónde accederemos al filesystem montado
+  - puede estar vacía pero.. DEBE EXISTIR
+  - si tenía archivos, estos quedarán inaccesibles mientras el filesystem esté montado (a menos que ya estuviera abierto el archivo)
+  #+END_QUOTE
+
+  #+BEGIN_QUOTE
+  Si queremos que un dispositivo esté montado de forma permanente necesitamos editar el archivo ~/etc/fstab~
+  - Ej. una partición de un disco duro que usamos sólo de almacenamiento, ó una partición que tiene instalada una distribución de Linux
+  #+END_QUOTE
+* /media
+  - directorio para crear *Puntos de Montaje* de *Dispositivos Removibles* (Ej. usb)
+  - luego de conectar un dispositivo removible, éste se suele montar automáticamente en ~/media~
+
+  #+BEGIN_QUOTE
+  Algunas diferencias entre ~/mnt~ y ~/media~
+  - ~/mnt~ es utilizado *puntos de montajes temporales*
+  - ~/mnt~ no hay montaje automático, se debe hacer de forma manual con el comando ~mount~
+  #+END_QUOTE
 * /bin
   - suele ser un (softlink) *enlace simbólico* a ~/usr/bin~
   - destinado a *usuarios normales* (es decir que no tenga permisos de superusuario)
@@ -267,38 +316,9 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
    - ~/dev/urandom~ es más rápido (pero poco seguro para la generacion de una clave criptográfica)
 * TODO /tmp
 ** /var/tmp
-* /boot
-  - contiene archivos utilizados por el *Cargador de Arranque* (Ej. GRUB ó LILO)
-  - guarda las imagenes del KERNEL de Linux
-** /boot/grub
-   - directorio con *archivos configuración* del (GRUB)
-* /mnt
-  - directorio para crear *Puntos de Montaje* (temporales) para
-    1) *Sistemas de Archivos* (Ej. ext3, ext4, ntfs, fat32, ..)
-    2) ó *Dispositivos* (Ej. /dev/sda1, /dev/sda2, .., /dev/cdrom, ..)
-  - el *proceso de montaje* permite que
-    1) un *Filesystem* esté disponible por el sistema (acceder a sus archivos)
-    2) el sistema accede al Filesytem montado a través del *punto de montaje* (Ej. /mnt/usb, /mnt/cdrom, ..)
-
-  #+BEGIN_QUOTE
-  Si MONTAMOS un dispositivo
-  - utilizamos el comando ~mount~ de la forma ~mount /dev/nombre-archivo-dispositivo ruta-punto-de-montaje~
-  - el comando ~mount~ requiere privilegios de superusuario (ó usuario root)
-  - Ej. ~mount /dev/sda1 /home~, ó ~mount /dev/usb /mnt/pendrive~
-
-  Si DESMONTAMOS un *dispositivo* ó un *punto de montaje*,
-  - utilizamos el comando ~umount~ de la forma ~umount nombre-dispositivo~ ó ~umount ruta-punto-de-montaje~
-  - Ej. ~umount /home~ ó ~umount /dev/sda1~
-
-  La ruta de punto de montaje
-  - es desde dónde accederemos al filesystem montado
-  - puede estar vacía pero.. DEBE EXISTIR
-  - si tenía archivos, estos quedarán inaccesibles mientras el filesystem esté montado (a menos que ya estuviera abierto el archivo)
-  #+END_QUOTE
-
-  #+BEGIN_QUOTE
-  Si queremos que un dispositivo esté montado de forma permanente necesitamos editar el archivo ~/etc/fstab~
-  - Ej. una partición de un disco duro que usamos sólo de almacenamiento, ó una partición que tiene instalada una distribución de Linux
-  #+END_QUOTE
-* TODO /opt
-* TODO /initrd
+* /opt
+  - para instalar *aplicaciones de terceros* que NO son distribuidas por los repositorios de paquetes oficiales de la Distribución de Linux utilizada
+* /lost+found
+  - directorio con archivos recuperados por el comando ~fsck~ previo a iniciar el sistema
+  - ~fsck~ es una herramienta que analiza/repara el sistema (Ej. si falló (crash) ó se forzó el apagado)
+* /run
