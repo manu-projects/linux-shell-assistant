@@ -2,8 +2,9 @@
 Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 #+END_QUOTE
 * Directorios Esenciales para el Arranque del Sistema
-** Directorios Esenciales en para el Arranque del Sistema
-   - directorios que deberían estar en la misma partición del *Sistema de Archivos Raíz* (/)
+** Directorios en la partición del Sistema de Archivos Raíz (/)
+   - el Sistema de Archivos Raíz (/) tiene *todos los archivos necesarios para arrancar el sistema*
+   - los directorios que deberían estar en la misma partición del *Sistema de Archivos Raíz* (/)
      1) /bin
      2) /boot
      3) /dev
@@ -11,8 +12,8 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
      5) /lib
      6) /proc
      7) /sbin
-** Directorios montables en otra partición
-   - directorios que pueden estar *montados en otra partición ó sistema* (para facilitar backups, ó por temas de seguridad)
+** Directorios que se pueden montar en otra partición diferente al Raiz (/)
+   - los directorios que pueden estar *montados en otra partición ó sistema* (para facilitar backups, ó por temas de seguridad)
      1) /home
      2) /mnt
      3) /tmp
@@ -92,6 +93,34 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
 * Sistema de Archivos (/home)
   - directorios específicos de los usuarios de linux
   - Ej. /home/jelou, /home/neverkas, ...
+* Sistema de Archivos (/proc)
+  - es un *Filesytem Virtual* porque *Kernel de Linux* lo *persiste en Memoria Principal* (RAM) en vez de fisicamente en Disco
+  - contiene información de sistema acerca de los procesos (por eso su nombre)
+  - dato de color sobre la mayoria de los archivos
+    - su tamaño es 0 (excepto el kcore que es una imagen de la memoria física de sistema)
+    - tienen permisos de sólo lectura (only-read)
+** /proc/1
+   - directorio con información del proceso con PID=1 (el primer proceso en ejecutar en el sistema)
+   - *cada proceso tiene su directorio* en ~/proc~ con su (PID) *número de identificación*
+** /proc/cpuinfo
+   - información del procesador (tipo, marca, modelo, ..)
+** /proc/devices
+   - archivo con un listado de *controladores de dispositivos* configurados en el Kernel de Linux (dispositivos de Caracter, dispositivos de Bloque)
+** /proc/tty
+   - directorio con información sobre las TTY
+*** /proc/tty/drivers
+    - archivo con un listado de drivers + su uso
+** /proc/filesystem
+   - archivo con un listado de *Sistemas de Archivos* soportados por el Kernel de Linux
+** /proc/meminfo
+   - archivo con información sobre la *memoria física* (RAM) y *swap* (espacio de intercambio)
+   - el comando ~free~
+     1) utiliza información de éste archivo (para mostrar la cantidad de memoria libre, utilizada)
+     2) permite mostrar la información en unidades mas humanizadas/entendibles
+** /proc/net
+   - directorio con el estado de los *protocolos de red* (wirless, tcp, udp, ...)
+** /proc/version
+   - archivo con la versión del kernel de linux
 * /bin
   - suele ser un (softlink) *enlace simbólico* a ~/usr/bin~
   - destinado a *usuarios normales* (es decir que no tenga permisos de superusuario)
@@ -260,6 +289,5 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
   Si queremos que un dispositivo esté montado de forma permanente necesitamos editar el archivo ~/etc/fstab~
   - Ej. una partición de un disco duro que usamos sólo de almacenamiento, ó una partición que tiene instalada una distribución de Linux
   #+END_QUOTE
-* TODO /proc
 * TODO /opt
 * TODO /initrd
