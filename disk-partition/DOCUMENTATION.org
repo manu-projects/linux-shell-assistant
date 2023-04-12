@@ -123,3 +123,10 @@
 ** Referencias
 *** Referencias Extraoficiales
     1. [[https://www.baeldung.com/linux/bind-mounts][understanding bind mounts (baeldung.com)]]
+* Referencias
+** Referencias Oficiales
+   1. [[https://www.pathname.com/fhs/][Filesystem Hierarchy Standard (pathname.com)]]
+   2. [[https://tldp.org/LDP/Linux-Filesystem-Hierarchy/html/c23.html][Linux Filesystem Hierarchy (tldp.org)]]
+   3. [[http://es.tldp.org/Manuales-LuCAS/doc-guia-admin-sis-linux/gasl.pdf][Guia para Administradores de Sistemas GNU/Linux (es.tldp.org)]]
+** Referencias Extraoficiales
+   1. [[https://www.makeuseof.com/linux-directory-structure-explained/][The Linux Directory Structure explained (makeuseof.com)]]

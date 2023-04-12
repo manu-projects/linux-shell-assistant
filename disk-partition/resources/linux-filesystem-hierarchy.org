@@ -254,6 +254,17 @@ Según el (FHS) Estándar de la Jerarquía del Sistema de Archivos de Linux
    - ~/dev/sdb2~ es la 2º partición
    - ~/dev/sdbn~ es la N partición (el número N dependerá del tipo de *Tabla de Particiones* con el que formateamos el dispositivo)
    #+END_QUOTE
+** /dev/lp0
+   - primer *dispositivo para impresoras* con *puerto paralelo*
+   - las subsiguientes impresoras tienen los nombres lp1, lp2, ..
+** /dev/null
+   - es un *dispositivo de caracteres*
+   - si le redireccionamos algo a él, éste algo desaparece
+   - utilizado para *redireccionar resultados de comandos no deseados en la Salida Estándar* (STDOUT)
+** /dev/random, /dev/urandom
+   - dispositivos *generadores de números aleatorios*
+   - ~/dev/random~ más seguro en temas de criptografía
+   - ~/dev/urandom~ es más rápido (pero poco seguro para la generacion de una clave criptográfica)
 * TODO /tmp
 ** /var/tmp
 * /boot
