@@ -1,4 +1,5 @@
-include $(MODULE_DISK_DEVICES)/disk-partitions.mk
+include $(MODULE_DISK_DEVICES)/traditional-partition.mk
+include $(MODULE_DISK_DEVICES)/logical-volume-manager.mk
 include $(MODULE_DISK_DEVICES)/repair-disk.mk
 include $(MODULE_DISK_DEVICES)/utils.mk
 
