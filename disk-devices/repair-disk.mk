@@ -5,7 +5,7 @@
 
 # TODO: boxes que notifique "comando principal" a modo de aprendizaje
 #
-# comando `badblock`
+# comando `badblocks`
 # - opción (-s): muestra el progreso en % de los bloques escaneados
 # - opción (-n): las operaciones de prueba lectura/escritura serán NO-destructivas (no borrará contenido del dispositivo)
 # - opción (-o): redirecciona a un archivo el resultado de la lista de bloques dañados a un archivo en vez de (STDOUT)
