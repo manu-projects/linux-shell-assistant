@@ -7,6 +7,8 @@ include disk-devices/Makefile
 include grub-boot/Makefile
 include shells-terminal-emulators/Makefile
 
+include $(MODULE_CRYPTO)/Makefile
+
 # TODO. validar si se puede generalizar más
 include $(MODULE_APPS_CLI)/*/Makefile
 include $(MODULE_APPS_TUI)/*/Makefile
