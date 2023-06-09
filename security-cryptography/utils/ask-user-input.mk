@@ -34,6 +34,8 @@ ASK_GPG_KEY_ID=read -p " > ingrese el ID de su Clave: " GPG_KEY_ID
 ASK_GPG_PRIVATE_KEY_ID=read -p " > ingrese el ID de su Clave Privada: " GPG_PRIVATE_KEY_ID
 ASK_GPG_PUBLIC_KEY_ID=read -p " > ingrese el ID de la Clave Pública: " GPG_PUBLIC_KEY_ID
 
+ASK_GPG_SUBKEY_ENCRYPT_ID=read -p " > ingrese el ID de la Clave Secundaria que Encripte/Desencripte: " GPG_SUBKEY_ENCRYPT_ID
+
 # TODO: terminar de documentar la forma en que utilizás el condicional de bash [[ predicado ]]
 #
 # 1. si el predicado se cumple asociar con una rama-if, se ejecutan las expresiones con el operador &&
@@ -51,6 +53,12 @@ CHECK_GPG_PRIVATE_KEY_ID= \
 	&& $(MAKE) --no-print-directory gpg-list-private-keys && $(ASK_GPG_PRIVATE_KEY_ID) \
 	|| $(ECHO_NOTHING)
 
+# TODO: lógica repetida con pubkey, privatekey
+CHECK_GPG_SUBKEY_ENCRYPT_ID= \
+	[[ $${GPG_SUBKEY_ENCRYPT_ID} == '?' ]] \
+	&& $(MAKE) --no-print-directory gpg-list-public-keys && $(ASK_GPG_SUBKEY_ENCRYPT_ID) \
+	|| $(ECHO_NOTHING)
+
 # - nos referimos al Par de Claves (pública/privada)
 ASK_AND_CHECK_GPG_PUBLIC_KEY_ID=$(NOTES_GPG_KEY_ID) \
 	&& echo $(ADVICE_GPG_KEY_ID) \
@@ -61,6 +69,12 @@ ASK_AND_CHECK_GPG_PRIVATE_KEY_ID=$(NOTES_GPG_KEY_ID) \
 	&& echo $(ADVICE_GPG_KEY_ID) \
 	&& $(ASK_GPG_PRIVATE_KEY_ID) \
 	&& $(CHECK_GPG_PRIVATE_KEY_ID)
+
+# TODO: lógica repetida con pubkey, privatekey
+ASK_AND_CHECK_GPG_SUBKEY_ENCRYPT_ID= \
+	echo $(ADVICE_GPG_KEY_ID) \
+	&& $(ASK_GPG_SUBKEY_ENCRYPT_ID) \
+	&& $(CHECK_GPG_SUBKEY_ENCRYPT_ID)
 
 # TODO: documentar sobre las nuevas opciones del comando `read`
 # https://linuxcommand.org/lc3_man_pages/readh.html
