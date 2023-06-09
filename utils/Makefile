@@ -1,8 +1,53 @@
+include $(UTILS)/*.mk
+
+WHIPTAIL_REDIRECT_STDERR=2>&1 1>/dev/tty
+ECHO_NOTHING=echo -n ""
+
+COPY=rsync --progress
+
+# utilizado en condicionales de bash [[ exp ]] && echo "rama-if" || echo "rama-else"
+BASH_CHECK_EMPTY_STRING= -z
+
+COPY_CLIPBOARD=xclip -rmlastnl -selection clipboard
+
+COLORED_OUTPUT=boxes -a hlvc -d parchment | lolcat --animate --duration=1 --seed=3
+
 NEWT_COLOR_PALETTE_DIALOGS="$(shell cat $(UTILS_CONFIGS)/whiptail-theme-green.cfg)"
 WHIPTAIL_COLORED=export NEWT_COLORS=$(NEWT_COLOR_PALETTE_DIALOGS); whiptail
 
 # usamos la opción (--assign) para definir una variable (x) que contenga las comillas dobles
-AWK_FORMAT_MENU_OPTIONS=awk --assign x="\"" --field-separator=':' '{print x$$1x, x$$2x}'
+AWK_WHIPTAIL_MENU_COLON_FIELDS=awk \
+	--assign x="\"" \
+	--field-separator=':' \
+	'{print x$$1x, x$$2x}'
+
+AWK_WHIPTAIL_CHECKLIST_COLON_FIELDS=awk \
+	--assign x="\"" \
+	--field-separator=':' \
+	'{print x$$1x, x$$2x " ON"}'
+
+# - el checklist de whiptail devuelve las opciones de la forma "opcion1" "opcion2" ..
+# - formateamos la salida de la forma opcion1,opcion2
+FORMAT_WHIPTAIL_CHECKLIST_RESULT=\
+	tr --delete "\"" \
+	| tr " " ","
+
+AWK_WHIPTAIL_MENU_COMMA_FIELDS=awk \
+	--assign x="\"" \
+	--field-separator=',' \
+	'{print $$1x, x$$2x}'
+
+# removemos los comentarios y espacios en blanco
+AWK_FORMAT_LST_FILES=sed '/^\# /d' | tr -d ' '
+
+# TODO: encontrar targets que lo necesiten
+FUZZY_FINDER=fzf \
+	--height 30% \
+	--header-lines=2 \
+	--layout=reverse
+
+# TODO: encontrar targets que lo necesiten
+FIND_FILES_HOME_DIR=find $${HOME} -type f
 
 # Nota:
 # - definimos una macro para la "coma" y la usamos dónde invocemos a nuestra función color_box de la forma $(,)
@@ -22,8 +67,28 @@ AWK_FORMAT_MENU_OPTIONS=awk --assign x="\"" --field-separator=':' '{print x$$1x,
 # -a vx (alinear verticalmente) dónde "x" puede ser t (top), c (center), b (bottom)
 #
 # Ej. boxes -a hlvc (alinear horizontalmente hacia la izquierda, alinear verticalmente hacia arriba)
+#
+# TODO: deprecar, en dónde se utilice reemplazar por color_Box_text
 define color_box
-	echo "Notas:\n" $(1) | boxes -a hlvc -d parchment | lolcat --animate --duration=1 --seed=35
+	echo -e "Notas:\n" $(1) | boxes -a hlvc -d parchment | lolcat --animate --duration=1 --seed=35
+endef
+
+define color_box_text
+	echo -e "Notas:\n" $(1) | boxes -a hlvc -d parchment | lolcat --animate --duration=1 --seed=35
+endef
+
+# TODO: documentar que el guión (-) en el cat es necesario,
+# para que tome el `echo` al principio
+# https://stackoverflow.com/questions/3005457/combining-echo-and-cat-on-unix
+#
+# otras alternativas
+#	tail --lines=+1 $(1) | sed -E 's/^==> .*\/(.*) <==$$/\1/g' \
+# echo "Notas:" | cat - $(1)
+define color_box_notes
+	tail --lines=+1 $(1) \
+	| sed -E '/^==> .* <==$$/d' \
+	| boxes -a hlvc -d parchment \
+	| lolcat --animate --duration=1 --seed=3
 endef
 
 ##@ Utilidades
