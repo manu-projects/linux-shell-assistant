@@ -24,3 +24,7 @@ install-encryption-pgpdump:
 # permite ingresar la "frase de paso" (passphrase) de GPG de forma segura
 install-encryption-pinentry-curses:
 	sudo aptitude install pinentry-curses
+
+# TODO: necesario cuando utilicemos yubikeys
+#install-gpg-dependencies:
+#	sudo aptitude install scdaemon

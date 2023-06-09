@@ -1,5 +1,6 @@
 * Referencias
 ** Referencias Oficiales
+   - https://wiki.archlinux.org/title/GnuPG
    - https://www.gnupg.org/gph/es/manual.html
    - https://www.gnupg.org/faq/gnupg-faq.html
    - https://www.gnupg.org/documentation/manuals/gnupg/Specify-a-User-ID.html
@@ -13,6 +14,7 @@
 ** Referencias de Universidades
    http://cs.uns.edu.ar/~jechaiz/seguridad/clases/Mod%20I%20-%206%20Cripto%20Clasica%20y%20Moderna.pdf
 ** Referencias Destacadas
+   - https://unix.stackexchange.com/questions/177291/how-to-renew-an-expired-keypair-with-gpg/177310#177310
    - https://www.genbeta.com/desarrollo/manual-de-gpg-cifra-y-envia-datos-de-forma-segura
    - https://www.alvarovf.com/seguridad/2020/10/11/cifrado-asimetrico-gpg-openssl.html
    - https://grimoire.carcano.ch/blog/a-quick-easy-yet-comprehensive-gpg-tutorial/
