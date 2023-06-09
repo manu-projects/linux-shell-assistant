@@ -1,4 +1,3 @@
--include config.cfg
--include firewall.mk
--include secure-shell.mk
--include network.mk
+include $(MODULE_NETWORK)/firewall.mk
+include $(MODULE_NETWORK)/network.mk
+include $(MODULE_NETWORK)/gns.mk
