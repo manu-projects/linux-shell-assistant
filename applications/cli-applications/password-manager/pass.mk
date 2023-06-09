@@ -9,8 +9,16 @@ ASK_PASS_KEYWORD =read -p "Escriba de la palabra clave a buscar (Ej. gmail, work
 PASS_ASK_GITHUB_PRIVKEY=`pass $${CATEGORY_NAME}/github/ssh-privkey`
 
 # TODO: refactor de las rutas, algo más genérico
-PASS_LIST_CATEGORIES=$(shell cat $(MODULE_APPS_CLI)/password-manager/resources/pass-categories.lst | $(AWK_FORMAT_MENU_OPTIONS))
-PASS_LIST_COMPANIES=$(shell cat $(MODULE_APPS_CLI)/password-manager/resources/pass-companies.lst | $(AWK_FORMAT_MENU_OPTIONS))
+# TODO: refactor global de AWK_FORMAT_MENU_OPTIONS por AWK_FORMAT_WHIPTAIL_MENU_OPTIONS (ó similar)
+PASS_LIST_CATEGORIES=$(shell \
+	cat $(MODULE_APPS_CLI)/password-manager/resources/pass-categories.lst \
+	| $(AWK_WHIPTAIL_MENU_COLON_FIELDS)\
+	)
+
+PASS_LIST_COMPANIES=$(shell \
+	cat $(MODULE_APPS_CLI)/password-manager/resources/pass-companies.lst \
+	| $(AWK_WHIPTAIL_MENU_COLON_FIELDS)\
+	)
 
 MENU_ASK_PASS_CATEGORY=$(shell $(WHIPTAIL_COLORED) \
 	--title "My Password Manager - Elegir Categoría" \
@@ -26,24 +34,31 @@ MENU_ASK_PASS_COMPANY=$(shell $(WHIPTAIL_COLORED) \
 	2>&1 1>/dev/tty \
 	)
 
+# TODO: refactor de la variable de bash que tiene asignada el comando sed,
+# (no podemos invocar a nuestra función definida con GNU Make,
+# y asignar su valor a una variable de bash)
+#
 # TODO: lanzar una excepción más descriptiva que el `exit 1`
 # no tratar a ASK_PASS como una macro de GNU Make, es una variable de entorno de (bash) Bourne Again Bash
 MENU_ASK_PASS= CATEGORY_NAME=$(MENU_ASK_PASS_CATEGORY); COMPANY_NAME=$(MENU_ASK_PASS_COMPANY);\
-	[[ -z "$${CATEGORY_NAME}" || -z "$${COMPANY_NAME}" ]] \
-	&& exit 1 \
-	|| ASK_PASS="$${CATEGORY_NAME}/$${COMPANY_NAME}"
+	[[ -z "$${CATEGORY_NAME}" || -z "$${COMPANY_NAME}" ]] && exit 1 || \
+	ASK_PASS="$${CATEGORY_NAME}/$${COMPANY_NAME}"; \
+	ASK_PASS_ESCAPING_SLASH=$$(sed 's/\//\\\//g' <<< $${ASK_PASS})
+#	ASK_PASS_ESCAPING_SLASH=$(call SED_ESCAPING_SLASH,$${ASK_PASS})
 
 pass-init:
-	$(ASK_GPG_IDKEY_USER_NAME) GPG_IDKEY_USER_NAME \
-	&& $(ASK_GPG_IDKEY_USER_MAIL) GPG_IDKEY_USER_MAIL \
-	&& pass init $(GPG_IDKEY)
+	$(ASK_AND_CHECK_GPG_SUBKEY_ENCRYPT_ID) \
+	&& pass init $${GPG_SUBKEY_ENCRYPT_ID}
 
 # TODO: es necesario? `pass insert` ya se crean los directorios
+# (quizás no está mal la idea, pero que sólo lo agregue en mi archivo .lst con un operador de redirección >)
 #pass-add-category:
 #	$(ASK_PASS_CATEGORY_NAME) PASS_CATEGORY_NAME \
 #	&& pass init --path=$${PASS_CATEGORY_NAME}
 
 # format: pass insert {store}/{company}/{environment}/{username or email}
+# TODO: modificar todas las instancias dónde usemos $${ASK_PASS}
+# sustituir por $${PASS} ó similar (también modificar la macro)
 pass-add-password:
 	$(MENU_ASK_PASS) \
 	&& pass insert $${ASK_PASS}
