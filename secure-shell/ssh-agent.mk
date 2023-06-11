@@ -1,7 +1,8 @@
 # targets sshagent-start y sshagent-add-privatekey
 # ================================================
 #
-# - TODO: NO utilizar si ya ejecutamos el shell script para auto-iniciar el Agente SSH ??? ó si ?? <--- validar
+# - NO ejecutar si ya ejecutamos el Shell script para auto-iniciar el Agente SSH
+# porque podría volverse tedioso manejar múltiples Agentes SSH
 #
 # - ejecutan un nuevo Agente SSH asociado a una única Shell
 # y configura en la Shell actual las "variables de entorno" para que funcione el Agente SSH
@@ -11,9 +12,14 @@
 #   2. la nueva Shell NO se conectará automáticamente al Agente SSH (al no tener las variables de entorno),
 #   a menos que definamos las variables manualmente en esta nueva Shell (algo tedioso si nos manejamos con múltiples "PTY Slave")
 
-# TODO: agregar el contenido del Shell script configs/ssh-agent-autostart.sh
-# ó.. agregar una linea en el .bash_profile que ejecute ~/.ssh-agent-autostart.sh (???)
-# TODO: que haga una copia de respaldo del ~/.bash_profile
+# TODO: copiar en $${HOME} el Shell Script de configs/ssh-agent-autostart.sh
+# e invocar desde ~/.bash_profile para que ejecute ~/.ssh-agent-autostart.sh
+#
+# TODO: que haga una copia de respaldo de ~/.bash_profile
+#
+# TODO: boxes educativo, diciendo que por seguridad NO recomendamos el auto-iniciar,
+# pero SI se recomienda iniciar el Agente SSH sólo en los momentos que lo utilicemos
+# (porque la seguridad del Sistema podría estar comprometida al iniciar)
 sshagent-autostart:
 	@echo "copiando configuración"
 
@@ -34,7 +40,7 @@ sshagent-autostart:
 # 1. evalúa el resultado devuelto por `ssh-agent` y los ejecuta como comandos de Shell
 # 2. la Shell interpreta los comandos y crea/modifica las variables de entorno mencionadas en la Shell
 # (estas variables de entorno son utilizadas por el comando `ssh-add`)
-sshagent-start: ## no es necesario si ya ejecutamos el autostart (???)
+sshagent-start:
 	eval $$(ssh-agent -s)
 
 # comandos `eval` + `ssh-agent -k`
@@ -63,9 +69,10 @@ sshagent-add-privatekey: # requiere el archivo de la privkey en ~/.ssh/
 	$(ASK_SSH_PRIVATE_KEY_NAME) SSH_PRIVATE_KEY_NAME \
 	&& ssh-add $${HOME}/.ssh/$${SSH_PRIVATE_KEY_NAME}
 
-# TODO: similar al target de github
+# TODO: similar al target de ssh-github.mk pero conexiones remotas locales
 # sshagent-add-privatekey-safe: ssh-install-askpass
 
+# es inseguro, dejamos el target para recordar "NO utilizar ssh-askpass"
 ssh-install-askpass:
 ifeq ("$(shell which ssh-askpass)", "")
 	sudo aptitude install ssh-askpass

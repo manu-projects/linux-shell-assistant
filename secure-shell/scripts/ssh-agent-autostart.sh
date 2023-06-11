@@ -1,4 +1,4 @@
-SSH_ENV="$HOME/.ssh/agent-environment"
+SSH_ENV="${HOME}/.ssh/agent-environment"
 
 function start_agent_ssh {
     echo "Inicializando un nuevo Agente de Autenticación de SSH en una Subshell..."
@@ -38,12 +38,12 @@ if [ -f "${SSH_ENV}" ]; then
     ps -ef | grep ${SSH_AGENT_PID} | grep ssh-agent$ > /dev/null || {
         echo "No existe un Agente SSH ejecutando."
         echo "Ejecutando un nuevo Agente SSH, y reescribiendo los comandos que definen las variables de entorno actuales de la Shell.."
-        start_agent_ssh;
+        start_agent_ssh
     }
 # 2. si NO existe el archivo que contiene los comandos devueltos al ejecutar el agente SSH
 else
     # 2.1. creamos el archivo (que guardará los comandos que devuelve el Agente SSH para setear las variables de entorno)
     # 2.2. ejecutamos un Agente SSH
     # 2.3. agregamos las claves privadas al Agente SSH
-    start_agent_ssh;
+    start_agent_ssh
 fi
