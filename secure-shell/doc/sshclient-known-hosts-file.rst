@@ -30,14 +30,17 @@ Lista de Hosts conocidos
 
 Columnas de la Lista de Hosts conocidos
 ----------------------------------------
-- Cada columna está delimitada/separada por un espacio
-  1. Primera columna, identifica el nombre del Host (Ej. github.com)
-  2. Segunda columna, el tipo del Par de Claves del Host (Ej. ssh-rsa, ssh-ed25519)
-  3. Tercer columna, el valor de la Clave Pública del Host (Ej. ABAAC3NzaC1lC3I1NTE5BBBBIOMzzncVzrm23dG6UMoqKLczsgH5C9okWi0dh2l8GKJl)
-  4. Cuarta columna, un comentario (es opcional)
-- Ejemplos de un Host conocido (los valores pueden variar, los acortamos para facilitar la lectura)
-  1. por default, con el nombre de host sin hashear: ``github.com ssh-ed25519 ABAAC3NzaC1lC3I1NTE5BBBBIOMzznc``
-  2. si queremos privacidad, con el nombre del host hasheado: ``|1|ubZjkle2nLmqF2LSZio=|Mno0/GVUTM= ssh-ed25519 ABAAC3NzaC1lC3I1NTE5BBBBIOMzznc``
+Cada columna está delimitada/separada por un espacio
+
+1. Primera columna, identifica el nombre del Host (Ej. github.com)
+2. Segunda columna, el tipo del Par de Claves del Host (Ej. ssh-rsa, ssh-ed25519)
+3. Tercer columna, el valor de la Clave Pública del Host (Ej. ABAAC3NzaC1lC3I1NTE5BBBBIOMzzncVzrm23dG6UMoqKLczsgH5C9okWi0dh2l8GKJl)
+4. Cuarta columna, un comentario (es opcional)
+
+Ejemplos de un Host conocido (los valores pueden variar, los acortamos para facilitar la lectura)
+
+1. por default, con el nombre de host sin hashear: ``github.com ssh-ed25519 ABAAC3NzaC1lC3I1NTE5BBBBIOMzznc``
+2. si queremos privacidad, con el nombre del host hasheado: ``|1|ubZjkle2nLmqF2LSZio=|Mno0/GVUTM= ssh-ed25519 ABAAC3NzaC1lC3I1NTE5BBBBIOMzznc``
 
 (recomendado) Proteger la Lista de Hosts conocidos
 --------------------------------------------------
@@ -54,6 +57,7 @@ Archivos de Configuración
 -------------------------
 - información detallada sobre las opciones ejecutar ``man ssh_config``
 - el OpenSSH del lado del Cliente sobreescribe las opciones, utilizando éste orden de prioridad
+
   1. la linea de comandos (mayor prioridad para sobreescribir opciones)
   2. ``~/.ssh/config`` (de un usuario específico del sistema)
   3. ``/etc/ssh/ssh_config`` (menor prioridad para sobreescribir opciones, para todos los usuarios del sistema, /etc requiere permisos de superusuario)

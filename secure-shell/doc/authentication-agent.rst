@@ -12,6 +12,7 @@ Usabilidad
 ----------
 - evita que el usuario escriba la **frase de paso** (passphrase) al establecer una conexión remota
 - guarda en memoria las **Claves PRIVADAS** y las **Frases de paso** asociadas (passphrase) y las recuerda
+
   1. mientras que la ejecucion del proceso no finalice
   2. mientras que la sesión de la **Interactive Login Shell** no finalice (se crea cuando iniciamos el sistema)
 
@@ -41,6 +42,7 @@ Comunicación con el Agente SSH
 - un **archivo del tipo socket** (Socket de Dominio Unix)
   - hace de *canal de comunicación* para la *transferencia de datos entre procesos*
   - comprobamos que NO es un *archivo regular* ejecutando en la linea de comandos
+
     1. ``echo ${SSH_AUTH_SOCK} | xargs file``
     2. ó ``echo ${SSH_AUTH_SOCK} | xargs ls -l``
 

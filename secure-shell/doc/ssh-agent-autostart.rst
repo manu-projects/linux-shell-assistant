@@ -24,15 +24,16 @@ Variables de Entorno
 - los comandos devueltos al iniciar el Agente SSH, creará variables de entorno sólo para esa Shell
 - Ej. si creamos desde un Emulador de Terminal otra PTY Slave, ésta tendrá asociada otra Shell pero sin las variables de entorno del Agente SSH)
 
-Ejecutar en 1º plano (foreground** en una Subshell
+Ejecutar en 1º plano (foreground) en una Subshell
 -------------------------------------------------
 
 Dónde lo iniciariamos
 *********************
 - Con un Script Shell en un archivo de configuración que se ejecute al iniciar el Sistema (Ej. ``~/.bash_profile``)
 - agregar al final del archivo porque supongamos el siguiente escenario
+
   1. si suspendimos otro proceso (Ej. vim)
-  2. al iniciar el agente SSH éste crea una subshell en primer plano (foreground**
+  2. al iniciar el agente SSH éste crea una subshell en **primer plano (foreground)**
   3. no podemos reanudar el proceso suspendido hasta finalizar la nueva subshell del Agente SSH
 
 Desventajas
@@ -52,7 +53,9 @@ en el archivo ~/.bashrc
 -----------------------
 - el script se ejecutará al iniciar una "Interactive Non-Login Shell", es decir una "Shell interactiva sin inicio de sesión"
 - una nueva instancia del **Agente SSH** se crearía con cada nueva "terminal" del "emulador de terminal" que utilicemos (Ej. xterm, konsole, ..)
-## Desventajas entre .bash_profile y .bashrc
+
+Desventajas entre ~/.bash_profile y ~/.bashrc
+---------------------------------------------
 - en el ``~/.bashrc``, el script debería controlar que se cree una única instancia del **Agente SSH** (Ej. con condicionales)
 - en el ``~/.bash_profile``, si fallara el inicio del **Agente SSH**, también fallaría el inicio de la sesión del Sistema
 

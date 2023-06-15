@@ -149,9 +149,10 @@ Archivos de Configuracón dónde ejecutar los Script Shell ó Comandos de Bash
 
 Agente GPG
 ----------
-- consideramos que es más seguro utilizar el **Agente GPG** que el **Agente SSH** de OpenSSH porque
-  1. importamos la **Clave Privada de SSH** del **Password Manager (pass)**
-  2. las claves del **Password Manager (pass)** están protegidas/encriptadas con GPG
+consideramos que es más seguro utilizar el **Agente GPG** que el **Agente SSH** de OpenSSH porque
+
+1. importamos la **Clave Privada de SSH** del **Password Manager (pass)**
+2. las claves del **Password Manager (pass)** están protegidas/encriptadas con GPG
 
 .. code-block:: shell
 
