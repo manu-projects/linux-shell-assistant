@@ -1,5 +1,10 @@
-Agentes de Autenticación (ssh-agent, gpg-agent)
-===============================================
+Agente SSH de OpenSSH (ssh-agent) y Agente GPG (gpg-agent)
+==========================================================
+
+Que son
+-------
+- Agentes de Autenticación Asimétrica (Ej. conectarse a un servidor de forma remota, conectarse a github, ..)
+- Gestores de Claves Privadas, persisten en memoria (desencriptan)
 
 Evitar su uso en maquinas NO confiables
 ---------------------------------------
@@ -18,8 +23,8 @@ Usabilidad
 
 Seguridad
 ---------
-- no exponen las *Claves Privadas* porque éste las guarda y sólo responden a las solicitudes de los Clientes SSH
-- evita el usuario deba manipular las claves privadas
+- no exponen las **Claves Privadas** porque éste las guarda (en memoria) y sólo responden a las solicitudes de los Clientes SSH
+- evita el usuario deba manipular los archivos de las **Claves Privadas** y sus **frases de paso** asociadas (passphrase)
 
 Agregar/Remover claves privadas en el Agente SSH (ssh-add)
 ==========================================================
@@ -31,8 +36,13 @@ Clientes SSH
 
 Seguridad
 ---------
-- consultan automáticamente al **Agente de Autenticación** por cualquier operación con las **Claves Privadas**
-- NO ven la **Clave Privada** del **Agente de Autenticación**, éste desencripta y responde las peticiones (es más seguro)
+- consultan al **Agente de Autenticación** cuando el Servidor SSH solicita la **Identidad del Usuario** (la Clave Privada)
+- consultan al **Agente de Autenticación** por cualquier operación con las **Claves Privadas**
+- NO ven la **Clave Privada**, sólo el **Agente de Autenticación** porque
+
+  1. el Cliente SSH le solicita al **Agente de Autenticación**
+  2. el **Agente de Autenticación** desencripta (con la Clave Privada) y crea/envía una respuesta al **Cliente SSH** (por su petición)
+  4. el Cliente SSH reenvía la respuesta (que armó el Agente) al Servidor SSH
 
 Comunicación con el Agente SSH
 ------------------------------
