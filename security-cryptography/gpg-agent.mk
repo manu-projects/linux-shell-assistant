@@ -34,10 +34,15 @@ gpg-agent-check-ssh-github:
 # TODO: boxes educativo diciendo que previamente debemos crear una Clave Secundaria Pública (sub, public subkey)
 # con la funcionalidad para firmar ([S]ign capability),
 # exportarla con formato ascii (--armor) y agregarla en nuestra cuenta de Github (https://github.com/settings/gpg/new)
-gpg-add-signature-to-github-commits:
+gpg-add-signature-to-github-commits: gpg-enable-signature-from-github-commits
 	$(ASK_AND_CHECK_GPG_PUBLIC_KEY_ID) \
-	&& git config --global commit.gpgsign true \
 	&& git config --global user.signingkey $${GPG_PUBLIC_KEY_ID}
+
+gpg-enable-signature-from-github-commits:
+	git config --global commit.gpgsign true
+
+gpg-disable-signature-from-github-commits:
+	git config --global commit.gpgsign false
 
 # TODO: refactor
 # TODO: boxes educativo, de que éste ID se puede utilizar en la configuración de git para los commits firmados
