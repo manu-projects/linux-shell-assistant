@@ -11,7 +11,7 @@
 #
 # 1. chmod 0700 ~/.ssh/ && chmod 0600 ~/.ssh/config
 # 2. ssh-keyscan -H -t tipo-algoritmo-clave-publica nombre-del-host >> ~/.ssh/known_hosts
-# 3. ssh-copy-id -oStrictHostKeyChecking=no -i ~/.ssh/nombre-clave-publica.pub direccion-ip
+# 3. ssh-copy-id -o StrictHostKeyChecking=no -i ~/.ssh/nombre-clave-publica.pub direccion-ip
 #
 
 Host nombre-del-servidor
