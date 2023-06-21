@@ -12,16 +12,13 @@
 #   2. la nueva Shell NO se conectará automáticamente al Agente SSH (al no tener las variables de entorno),
 #   a menos que definamos las variables manualmente en esta nueva Shell (algo tedioso si nos manejamos con múltiples "PTY Slave")
 
-# TODO: copiar en $${HOME} el Shell Script de configs/ssh-agent-autostart.sh
-# e invocar desde ~/.bash_profile para que ejecute ~/.ssh-agent-autostart.sh
-#
-# TODO: que haga una copia de respaldo de ~/.bash_profile
-#
 # TODO: boxes educativo, diciendo que por seguridad NO recomendamos el auto-iniciar,
 # pero SI se recomienda iniciar el Agente SSH sólo en los momentos que lo utilicemos
 # (porque la seguridad del Sistema podría estar comprometida al iniciar)
 sshagent-autostart:
-	@echo "copiando configuración"
+	@echo "Copiando configuración en $${HOME}/.bashrc" \
+	&& rsync $(MODULE_SECURE_SHELL_SCRIPTS)/ssh-agent-autostart.sh $(SSH_CLIENT_DIR)/ssh-agent-autostart.sh \
+	&& echo "source $(SSH_CLIENT_DIR)/ssh-agent-autostart.sh" >> $${HOME}/.bashrc
 
 # comandos `eval` y `ssh-agent -s`
 # ================================
@@ -65,13 +62,14 @@ sshagent-kill:
 #
 # 1. el Agente de Autenticación OpenSSH debe estar ejecutando
 # 2. debe existir la Variable de Entorno `SSH_AUTH_SOCK` (el devuelto por `ssh-agent -s`) porque utiliza ese socket
-sshagent-add-privatekey: # requiere el archivo de la privkey en ~/.ssh/
-	$(ASK_SSH_PRIVATE_KEY_NAME) SSH_PRIVATE_KEY_NAME \
-	&& ssh-add $${HOME}/.ssh/$${SSH_PRIVATE_KEY_NAME}
+sshagent-add-privatekey-file: # requiere el archivo de la privkey en ~/.ssh/
+	$(ASK_SSH_PRIVATE_KEY_NAME) \
+	&& ssh-add $(SSH_CLIENT_DIR)/$${SSH_PRIVATE_KEY_NAME}
 
 # TODO: similar al target de ssh-github.mk pero conexiones remotas locales
 # sshagent-add-privatekey-safe: ssh-install-askpass
 
+# TODO: dar un aviso de que ya NO es seguro utilizar
 # es inseguro, dejamos el target para recordar "NO utilizar ssh-askpass"
 ssh-install-askpass:
 ifeq ("$(shell which ssh-askpass)", "")
@@ -84,9 +82,9 @@ sshagent-list-fingerprints:
 sshagent-list-publickeys:
 	ssh-add -L
 
-sshagent-delete-identity:
-	$(ASK_SSH_PRIVATE_KEY_NAME) SSH_PRIVATE_KEY_NAME \
-	&& ssh-add -d $${HOME}/.ssh/$${SSH_PRIVATE_KEY_NAME}
+sshagent-delete-identity-from-privatekey-file:
+	$(ASK_SSH_PRIVATE_KEY_NAME) \
+	&& ssh-add -d $(SSH_CLIENT_DIR)/$${SSH_PRIVATE_KEY_NAME}
 
 # TODO: popup con whiptail de confirmar acción
 sshagent-delete-identities:
