@@ -1,27 +1,11 @@
-ASK_GITHUB_EMAIL=read -p "ingrese su email asociado a github: " GITHUB_EMAIL
-
-sshclient-github-check: ssh-generate-certificate
+sshclient-github-check:
 	ssh -vT git@github.com
 
-# TODO: refactor, crear variable CLIENT_SSH_DIR=$${HOME}/.ssh
-#
 # TODO: boxes avisando que buscará la clave agregando el prefijo github_
 # (no sería necesario agregar github_ as input)
 sshagent-github-add-privatekey-file:  # requiere el archivo de la privkey en ~/.ssh/
 	$(ASK_SSH_KEY_NAME) \
-	&& ssh-add $${HOME}/.ssh/$${SSH_KEY_NAME}
-
-# TODO: mover a ssh-client.mk
-sshclient-remove-privatekey-file:
-	$(ASK_SSH_KEY_NAME) \
-	&& rm -vi $${HOME}/.ssh/$${SSH_KEY_NAME}
-
-# TODO: mover a ssh-client.mk
-# TODO: generar una variable con el xclip, y agregar en utils/
-sshclient-copy-publickey-to-clipboard:
-	$(ASK_SSH_KEY_NAME) \
-	&& cat $${HOME}/.ssh/$${SSH_KEY_NAME}.pub \
-	| xclip -rmlastnl -selection clipboard
+	&& ssh-add $(SSH_CLIENT_DIR)/$${SSH_KEY_NAME}
 
 # TODO: boxes diciendo que ya se puede borrar el archivo físico de la clave privada de ~/.ssh
 # que la clave ahora está más segura utilizando `pass`, porque ya no pueden robarnos el archivo físico
