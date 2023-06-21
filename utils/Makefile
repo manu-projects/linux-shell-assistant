@@ -1,5 +1,8 @@
 include $(UTILS)/*.mk
 
+# TODO: presenta problemas si lo utilizamos dentro de un ifeq de GNU Make
+PRINT_OCTAL_PERMISSIONS=stat --format='%a'
+
 WHIPTAIL_REDIRECT_STDERR=2>&1 1>/dev/tty
 ECHO_NOTHING=echo -n ""
 
@@ -8,6 +11,9 @@ COPY=rsync --progress
 # utilizado en condicionales de bash [[ exp ]] && echo "rama-if" || echo "rama-else"
 BASH_CHECK_EMPTY_STRING= -z
 
+COPY_TO_CLIPBOARD=xclip -rmlastnl -selection clipboard
+
+# TODO: sustituir los lugares en que lo utilizamos, por COPY_TO_CLIPBOARD (es más expresivo)
 COPY_CLIPBOARD=xclip -rmlastnl -selection clipboard
 
 COLORED_OUTPUT=boxes -a hlvc -d parchment | lolcat --animate --duration=1 --seed=3
